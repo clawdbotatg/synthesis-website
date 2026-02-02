@@ -45,3 +45,18 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* V6 Brutalist Marquee */
+@keyframes brutalist-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.brutalist-marquee {
+  display: inline-block;
+  animation: brutalist-scroll linear infinite;
+}

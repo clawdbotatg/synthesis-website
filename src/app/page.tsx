@@ -31,6 +31,33 @@ const versions = [
     border: "border-amber-500/20 hover:border-amber-400/60",
     accent: "bg-gradient-to-r from-amber-300 to-cyan-300 bg-clip-text text-transparent",
   },
+  {
+    path: "/v4",
+    name: "Liquid Gradient",
+    description:
+      "Flowing mesh gradients, soft color transitions, organic shapes. Calm yet futuristic — like looking through frosted glass.",
+    bg: "bg-[#0a0a0a]",
+    border: "border-purple-500/20 hover:border-purple-400/60",
+    accent: "text-purple-400",
+  },
+  {
+    path: "/v5",
+    name: "Editorial Luxury",
+    description:
+      "Warm off-white background, serif headings, magazine-style layout. Playfair Display meets editorial sophistication.",
+    bg: "bg-[#FAFAF7]",
+    border: "border-stone-400/20 hover:border-stone-600/60",
+    accent: "text-stone-800",
+  },
+  {
+    path: "/v6",
+    name: "Brutalist/Bold",
+    description:
+      "Massive typography, electric yellow on black. Overlapping elements, heavy borders, raw energy. Bloomberg Businessweek meets underground zine.",
+    bg: "bg-black",
+    border: "border-[#EBFF00]/30 hover:border-[#EBFF00]/80",
+    accent: "text-[#EBFF00]",
+  },
 ];
 
 export default function Home() {

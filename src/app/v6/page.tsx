@@ -4,37 +4,40 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { content } from "@/lib/content";
 
-const fadeUp = {
-  initial: { opacity: 0, y: 30 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-50px" },
-  transition: { duration: 0.6, ease: [0.33, 1, 0.68, 1] },
-};
+/* ── Brutalist / Bold ──────────────────────────────────────────────
+   Massive typography, raw, intentionally "ugly-beautiful."
+   Electric yellow + red on black. Overlapping elements, rotated text.
+   No rounded corners anywhere. Bloomberg Businessweek × underground zine.
+   ─────────────────────────────────────────────────────────────────── */
 
-function BrutalistFAQ({ items }: { items: { q: string; a: string }[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+const YELLOW = "#FFE600";
+const RED = "#FF2200";
+
+function BrutalFAQ({ items }: { items: { q: string; a: string }[] }) {
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
     <div>
       {items.map((item, i) => (
-        <div key={i} className="border-b-4 border-[#EBFF00]">
+        <div key={i} className="border-b-4 border-white/10">
           <button
-            onClick={() => setOpenIndex(openIndex === i ? null : i)}
-            className="w-full text-left py-5 flex items-center justify-between gap-4 cursor-pointer group"
+            onClick={() => setOpen(open === i ? null : i)}
+            className="w-full text-left py-6 md:py-8 flex items-start justify-between gap-4 cursor-pointer group"
           >
-            <span className="text-lg md:text-xl font-black text-white uppercase group-hover:text-[#EBFF00] transition-colors">
+            <span className="text-lg md:text-2xl font-black uppercase tracking-tight text-white group-hover:text-[#FFE600] transition-colors">
               {item.q}
             </span>
             <motion.span
-              animate={{ rotate: openIndex === i ? 45 : 0 }}
+              animate={{ rotate: open === i ? 45 : 0 }}
               transition={{ duration: 0.15 }}
-              className="text-3xl text-[#EBFF00] font-black flex-shrink-0"
+              className="text-4xl md:text-5xl font-black flex-shrink-0 leading-none"
+              style={{ color: RED }}
             >
               +
             </motion.span>
           </button>
           <AnimatePresence>
-            {openIndex === i && (
+            {open === i && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
@@ -42,7 +45,7 @@ function BrutalistFAQ({ items }: { items: { q: string; a: string }[] }) {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <p className="pb-6 text-white/70 leading-relaxed text-lg">
+                <p className="pb-8 text-white/60 text-lg md:text-xl leading-relaxed max-w-3xl">
                   {item.a}
                 </p>
               </motion.div>
@@ -54,449 +57,664 @@ function BrutalistFAQ({ items }: { items: { q: string; a: string }[] }) {
   );
 }
 
-function Marquee({ text, speed = 20 }: { text: string; speed?: number }) {
-  const repeated = Array(8).fill(text).join(" ★ ");
-  return (
-    <div className="overflow-hidden border-y-4 border-[#EBFF00] py-3 bg-[#EBFF00] select-none">
-      <div className="brutalist-marquee whitespace-nowrap" style={{ animationDuration: `${speed}s` }}>
-        <span className="text-black font-black text-lg md:text-xl tracking-wider">
-          {repeated} ★ {repeated}
-        </span>
-      </div>
-    </div>
-  );
-}
-
 export default function V6() {
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-black border-b-4 border-[#EBFF00]">
-        <div className="max-w-none mx-auto px-6 py-3 flex items-center justify-between">
-          <span className="text-xl font-black tracking-tighter text-[#EBFF00]">
+    <div className="min-h-screen bg-black text-white overflow-hidden" style={{ fontFamily: "system-ui, sans-serif" }}>
+      {/* ── NAV ── */}
+      <nav className="fixed top-0 w-full z-50 bg-black border-b-4 border-white">
+        <div className="flex items-center justify-between px-4 md:px-8 py-3">
+          <a href="#" className="text-sm md:text-base font-black tracking-[0.3em] uppercase">
             SYNTHESIS
-          </span>
-          <div className="hidden md:flex gap-6 text-xs font-black tracking-wider">
-            <a href="#tracks" className="text-white hover:text-[#EBFF00] transition-colors">TRACKS</a>
-            <a href="#judging" className="text-white hover:text-[#EBFF00] transition-colors">JUDGING</a>
-            <a href="#prizes" className="text-white hover:text-[#EBFF00] transition-colors">PRIZES</a>
-            <a href="#faq" className="text-white hover:text-[#EBFF00] transition-colors">FAQ</a>
+          </a>
+          <div className="hidden md:flex items-center gap-6 text-xs font-black tracking-[0.2em] uppercase">
+            <a href="#tracks" className="hover:text-[#FFE600] transition-colors">Tracks</a>
+            <a href="#judging" className="hover:text-[#FFE600] transition-colors">Judging</a>
+            <a href="#prizes" className="hover:text-[#FFE600] transition-colors">Prizes</a>
+            <a href="#faq" className="hover:text-[#FFE600] transition-colors">FAQ</a>
           </div>
           <a
             href="#apply"
-            className="bg-[#EBFF00] text-black font-black text-xs px-5 py-2 hover:bg-white transition-colors"
+            className="px-4 py-2 text-xs font-black tracking-[0.2em] uppercase"
+            style={{ backgroundColor: YELLOW, color: "black" }}
           >
-            APPLY NOW
+            Apply Now
           </a>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="min-h-screen flex flex-col justify-center px-6 pt-20 relative">
-        {/* Rotated background text */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none select-none">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.04 }}
-            transition={{ duration: 2 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-12"
-          >
-            <span className="text-[20vw] font-black text-white leading-none whitespace-nowrap">
-              SYNTHESIS
-            </span>
-          </motion.div>
+      {/* ── HERO ── */}
+      <section className="min-h-screen flex flex-col justify-center relative px-4 md:px-8 pt-20">
+        {/* Background rotated accent text */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20vw] font-black opacity-[0.03] whitespace-nowrap pointer-events-none select-none"
+          style={{ transform: "translate(-50%, -50%) rotate(-12deg)" }}
+        >
+          SYNTHESIS
         </div>
 
-        <div className="max-w-none mx-auto w-full relative z-10">
-          <motion.p
-            initial={{ opacity: 0, x: -30 }}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10"
+        >
+          {/* Rotated label */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-sm md:text-base font-black tracking-[0.3em] text-[#EBFF00] mb-6 uppercase"
+            className="mb-6"
           >
-            {content.hero.subtitle}
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-7xl md:text-[10rem] lg:text-[14rem] font-black tracking-tighter leading-[0.85] mb-8"
-          >
-            THE
-            <br />
-            <span className="text-[#EBFF00]">SYNTHE</span>
-            <span className="text-white">SIS</span>
-          </motion.h1>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="flex flex-col md:flex-row md:items-end gap-6 md:gap-12"
-          >
-            <p className="text-xl md:text-2xl font-bold text-white/60 max-w-md leading-tight">
-              {content.hero.catchphrase}
-            </p>
-            <p className="text-xs text-white/30 font-bold tracking-wider max-w-xs">
-              {content.hero.microcopy}
-            </p>
+            <span
+              className="inline-block text-xs md:text-sm font-black tracking-[0.4em] uppercase px-3 py-1 -rotate-2"
+              style={{ backgroundColor: RED, color: "white" }}
+            >
+              {content.hero.subtitle}
+            </span>
           </motion.div>
 
+          {/* Massive title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-[15vw] md:text-[12vw] lg:text-[10vw] font-black leading-[0.85] tracking-tighter uppercase"
+          >
+            <span className="block" style={{ WebkitTextStroke: "2px white", color: "transparent" }}>
+              THE
+            </span>
+            <span className="block" style={{ color: YELLOW }}>
+              SYNTH
+            </span>
+            <span className="block">
+              ESIS
+            </span>
+          </motion.h1>
+
+          {/* Catchphrase overlapping */}
+          <motion.p
+            initial={{ opacity: 0, rotate: 0 }}
+            animate={{ opacity: 1, rotate: -1.5 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="text-lg md:text-2xl lg:text-3xl font-black italic mt-4 md:-mt-4 ml-2 md:ml-12"
+            style={{ color: YELLOW }}
+          >
+            &ldquo;{content.hero.catchphrase}&rdquo;
+          </motion.p>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.6 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+            className="text-base md:text-xl max-w-2xl mt-8 leading-relaxed"
+          >
+            {content.hero.description}
+          </motion.p>
+
+          {/* Microcopy */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+            className="text-sm md:text-base mt-4 font-black tracking-wider uppercase"
+          >
+            {content.hero.microcopy}
+          </motion.p>
+
+          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-0 mt-12"
+            transition={{ delay: 0.8, duration: 0.5 }}
+            className="flex flex-wrap gap-4 mt-10"
           >
             {content.hero.ctas.primary.map((cta, i) => (
               <a
                 key={cta.label}
                 href={cta.href}
-                className={`px-8 py-4 text-sm font-black tracking-wider transition-colors border-2 ${
+                className="px-6 md:px-8 py-3 md:py-4 text-sm md:text-base font-black tracking-[0.15em] uppercase border-4 transition-all duration-150 hover:scale-105"
+                style={
                   i === 0
-                    ? "bg-[#EBFF00] text-black border-[#EBFF00] hover:bg-white hover:border-white"
+                    ? { backgroundColor: YELLOW, borderColor: YELLOW, color: "black" }
                     : i === 1
-                    ? "bg-transparent text-[#EBFF00] border-[#EBFF00] hover:bg-[#EBFF00] hover:text-black"
-                    : "bg-transparent text-white border-white hover:bg-white hover:text-black"
-                }`}
+                      ? { backgroundColor: RED, borderColor: RED, color: "white" }
+                      : { backgroundColor: "transparent", borderColor: "white", color: "white" }
+                }
               >
-                {cta.label.toUpperCase()}
+                {cta.label}
               </a>
             ))}
           </motion.div>
-        </div>
-      </section>
 
-      {/* Marquee */}
-      <Marquee text="COOPERATION IS OPTIONAL — SYNTHESIS IS INEVITABLE" speed={25} />
-
-      {/* What This Is */}
-      <section className="px-6 py-20 md:py-28">
-        <div className="max-w-none mx-auto">
-          <motion.div {...fadeUp} className="flex flex-col md:flex-row gap-8 md:gap-16">
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-[#EBFF00] md:w-1/3 leading-none uppercase">
-              {content.whatThisIs.title}
-            </h2>
-            <div className="md:w-2/3 space-y-6">
-              {content.whatThisIs.body.map((p, i) => (
-                <motion.p
-                  key={i}
-                  {...fadeUp}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="text-xl md:text-2xl text-white/70 leading-relaxed font-medium"
-                >
-                  {p}
-                </motion.p>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Tracks */}
-      <section id="tracks" className="border-t-4 border-[#EBFF00]">
-        <div className="px-6 py-20 md:py-28">
-          <motion.h2
-            {...fadeUp}
-            className="text-6xl md:text-9xl font-black tracking-tighter mb-16 leading-none"
-          >
-            TRACKS
-          </motion.h2>
-
-          <div className="space-y-0">
-            {content.tracks.items.map((track, i) => (
-              <motion.div
-                key={track.id}
-                {...fadeUp}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                className={`border-b-4 ${i === 0 ? "border-t-4" : ""} border-white/20 py-10 md:py-14 hover:bg-white/[0.02] transition-colors`}
+          {/* Secondary links */}
+          <div className="flex flex-wrap gap-6 mt-6">
+            {content.hero.ctas.secondary.map((cta) => (
+              <a
+                key={cta.label}
+                href={cta.href}
+                className="text-xs font-black tracking-[0.2em] uppercase underline underline-offset-4 decoration-2 hover:text-[#FFE600] transition-colors"
+                style={{ textDecorationColor: RED }}
               >
-                <div className="flex flex-col md:flex-row gap-6 md:gap-12">
-                  <div className="md:w-1/3">
-                    <span className="text-7xl md:text-8xl font-black text-white/10">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="text-3xl md:text-4xl font-black text-[#EBFF00] tracking-tighter -mt-4">
-                      {track.name.toUpperCase()}
-                    </h3>
-                  </div>
-                  <div className="md:w-2/3">
-                    <p className="text-xl text-white/70 mb-6 font-bold">
-                      {track.tagline}
+                {cta.label}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Ethos - bottom of hero */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1 }}
+          className="absolute bottom-8 right-4 md:right-8 text-right"
+        >
+          <p className="text-xs md:text-sm font-black tracking-[0.3em] uppercase opacity-30 rotate-90 origin-bottom-right translate-x-full -translate-y-full md:rotate-0 md:translate-x-0 md:translate-y-0">
+            {content.hero.ethos}
+          </p>
+        </motion.div>
+      </section>
+
+      {/* ── WHAT THIS IS ── */}
+      <section className="relative px-4 md:px-8 py-20 md:py-32 border-t-4 border-white">
+        {/* Decorative big number */}
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          01
+        </span>
+
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2
+            className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-12"
+            style={{ color: YELLOW }}
+          >
+            {content.whatThisIs.title}
+          </h2>
+        </motion.div>
+
+        <div className="max-w-4xl space-y-6">
+          {content.whatThisIs.body.map((p, i) => (
+            <motion.p
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="text-lg md:text-2xl text-white/70 leading-relaxed"
+            >
+              {p}
+            </motion.p>
+          ))}
+        </div>
+      </section>
+
+      {/* ── TRACKS ── */}
+      <section id="tracks" className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative">
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          02
+        </span>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-6xl md:text-9xl lg:text-[10rem] font-black uppercase tracking-tighter leading-[0.85] mb-16"
+        >
+          <span style={{ WebkitTextStroke: "3px white", color: "transparent" }}>
+            {content.tracks.title}
+          </span>
+        </motion.h2>
+
+        <div className="grid md:grid-cols-3 gap-0">
+          {content.tracks.items.map((track, i) => (
+            <motion.article
+              key={track.id}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              className="border-4 border-white p-6 md:p-8 -mt-1 md:mt-0 md:-ml-1 relative group hover:z-10"
+              style={{
+                backgroundColor: i === 0 ? YELLOW : i === 1 ? RED : "black",
+                color: i === 2 ? "white" : "black",
+              }}
+            >
+              {/* Track number */}
+              <span className="text-8xl md:text-9xl font-black opacity-10 absolute top-2 right-4 leading-none">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <div className="relative z-10">
+                <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tight mb-4 leading-tight">
+                  {track.name}
+                </h3>
+                <p className={`text-base md:text-lg mb-6 leading-relaxed ${i === 2 ? "text-white/70" : "opacity-80"}`}>
+                  {track.tagline}
+                </p>
+
+                {track.examples && (
+                  <ul className="space-y-2 mb-4">
+                    {track.examples.map((ex, j) => (
+                      <li key={j} className={`text-sm flex gap-2 ${i === 2 ? "text-white/60" : "opacity-70"}`}>
+                        <span className="font-black">→</span>
+                        <span>{ex}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {track.details && (
+                  <ul className="space-y-2 mb-4">
+                    {track.details.map((d, j) => (
+                      <li key={j} className={`text-sm flex gap-2 ${i === 2 ? "text-white/60" : "opacity-70"}`}>
+                        <span className="font-black">→</span>
+                        <span>{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {track.note && (
+                  <p className={`text-xs mt-4 border-l-4 pl-4 ${i === 2 ? "border-white/30 text-white/50" : "border-black/30 opacity-60"}`}>
+                    {track.note}
+                  </p>
+                )}
+
+                {track.wants && (
+                  <div className="mt-4">
+                    <p className="text-xs font-black tracking-[0.2em] uppercase mb-2 opacity-60">
+                      What we want
                     </p>
-
-                    {track.examples && (
-                      <div className="space-y-2 mb-4">
-                        {track.examples.map((ex, j) => (
-                          <div key={j} className="flex gap-3 text-white/40">
-                            <span className="text-[#EBFF00] font-black">→</span>
-                            <span>{ex}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {track.details && (
-                      <div className="space-y-2 mb-4">
-                        {track.details.map((d, j) => (
-                          <div key={j} className="flex gap-3 text-white/40">
-                            <span className="text-[#EBFF00] font-black">→</span>
-                            <span>{d}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {track.note && (
-                      <div className="bg-[#EBFF00] text-black px-4 py-3 mt-4 inline-block">
-                        <span className="font-black text-xs">{track.note}</span>
-                      </div>
-                    )}
-
-                    {track.wants && (
-                      <div className="mt-4">
-                        <p className="font-black text-xs text-[#EBFF00] tracking-wider mb-2">
-                          WHAT WE WANT:
-                        </p>
-                        {track.wants.map((w, j) => (
-                          <div key={j} className="flex gap-3 text-white/40 mb-1">
-                            <span className="text-[#EBFF00] font-black">→</span>
-                            <span>{w}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    {track.wants.map((w, j) => (
+                      <p key={j} className={`text-sm ${i === 2 ? "text-white/60" : "opacity-70"}`}>
+                        → {w}
+                      </p>
+                    ))}
                   </div>
-                </div>
-              </motion.div>
+                )}
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      {/* ── TROJAN HORSE ── */}
+      <section className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative overflow-hidden">
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          03
+        </span>
+
+        {/* Diagonal stripe decoration */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(45deg, white 0px, white 2px, transparent 2px, transparent 20px)`,
+          }}
+        />
+
+        <div className="relative z-10">
+          <motion.div
+            initial={{ opacity: 0, rotate: 0 }}
+            whileInView={{ opacity: 1, rotate: -2 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-block mb-12"
+          >
+            <h2
+              className="text-4xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] px-4 py-2"
+              style={{ backgroundColor: RED, color: "white" }}
+            >
+              {content.trojanHorse.title}
+            </h2>
+          </motion.div>
+
+          <div className="max-w-4xl space-y-8">
+            {content.trojanHorse.body.map((p, i) => (
+              <motion.p
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                className="text-lg md:text-2xl text-white/70 leading-relaxed"
+              >
+                {p}
+              </motion.p>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trojan Horse — Inverted */}
-      <section className="bg-[#EBFF00] text-black">
-        <div className="px-6 py-20 md:py-28">
-          <motion.div {...fadeUp}>
-            <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-10 leading-none uppercase">
-              {content.trojanHorse.title}
-            </h2>
-            <div className="max-w-3xl space-y-6">
-              {content.trojanHorse.body.map((p, i) => (
-                <p key={i} className="text-xl md:text-2xl font-medium leading-relaxed text-black/80">
-                  {p}
-                </p>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* ── JUDGING ── */}
+      <section id="judging" className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative">
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          04
+        </span>
 
-      <Marquee text="JUDGED BY HUMANS AND AI — NO SCREENSHOTS — SHIP REAL CODE" speed={30} />
-
-      {/* Judging */}
-      <section id="judging" className="px-6 py-20 md:py-28">
         <motion.h2
-          {...fadeUp}
-          className="text-6xl md:text-9xl font-black tracking-tighter mb-4 leading-none"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-4"
+          style={{ color: YELLOW }}
         >
-          JUDGING
+          {content.judging.title}
         </motion.h2>
         <motion.p
-          {...fadeUp}
-          className="text-2xl font-black text-[#EBFF00] tracking-tighter mb-16 uppercase"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="text-sm font-black tracking-[0.3em] uppercase text-white/40 mb-16"
         >
           {content.judging.subtitle}
         </motion.p>
 
-        <div className="grid md:grid-cols-2 gap-0">
+        <div className="grid md:grid-cols-2 gap-0 mb-16">
           {content.judging.juries.map((jury, i) => (
             <motion.div
               key={i}
-              {...fadeUp}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`border-4 ${i === 0 ? "border-[#EBFF00]" : "border-white"} p-8 md:p-12 ${i === 0 ? "-mr-1" : ""}`}
+              className="border-4 border-white p-8 md:p-12 -mt-1 md:mt-0 md:-ml-1"
+              style={{ backgroundColor: i === 0 ? "rgba(255,230,0,0.08)" : "rgba(255,34,0,0.08)" }}
             >
-              <h3 className="text-3xl font-black mb-4 tracking-tighter">
-                {jury.name.toUpperCase()}
+              <h3
+                className="text-2xl md:text-4xl font-black uppercase tracking-tight mb-6"
+                style={{ color: i === 0 ? YELLOW : RED }}
+              >
+                {jury.name}
               </h3>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-white/60 text-base md:text-lg leading-relaxed">
                 {jury.criteria}
               </p>
             </motion.div>
           ))}
         </div>
 
-        <motion.div {...fadeUp} className="mt-16">
-          <h3 className="text-3xl font-black text-[#EBFF00] tracking-tighter mb-8 uppercase">
+        {/* What Wins */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h3 className="text-2xl md:text-4xl font-black uppercase tracking-tight mb-8">
             {content.judging.whatWins.title}
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
             {content.judging.whatWins.items.map((item, i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <span className="text-[#EBFF00] font-black text-2xl leading-none">✦</span>
-                <span className="text-white/70 text-lg font-bold">{item}</span>
-              </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: i * 0.08 }}
+                className="flex gap-3 text-white/60 text-lg"
+              >
+                <span style={{ color: YELLOW }} className="font-black">■</span>
+                <span>{item}</span>
+              </motion.div>
             ))}
           </div>
         </motion.div>
       </section>
 
-      {/* Prize Pool */}
-      <section id="prizes" className="border-t-4 border-[#EBFF00] px-6 py-20 md:py-28 relative">
-        {/* Rotated dollar sign */}
-        <div className="absolute top-10 right-10 text-[20vw] font-black text-white/[0.03] leading-none pointer-events-none select-none rotate-12">
-          $
-        </div>
+      {/* ── PRIZES ── */}
+      <section id="prizes" className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative" style={{ backgroundColor: YELLOW, color: "black" }}>
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.06] select-none pointer-events-none">
+          05
+        </span>
 
-        <motion.h2
-          {...fadeUp}
-          className="text-6xl md:text-9xl font-black tracking-tighter mb-4 leading-none relative z-10"
-        >
-          PRIZE POOL
-        </motion.h2>
+        <div className="relative z-10">
+          <motion.h2
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-4"
+          >
+            {content.prizes.title}
+          </motion.h2>
 
-        <motion.div {...fadeUp} className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-end gap-4 mb-16">
-            <span className="text-7xl md:text-[10rem] font-black text-[#EBFF00] tracking-tighter leading-none">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mb-16"
+          >
+            <span className="text-7xl md:text-[10rem] lg:text-[12rem] font-black leading-none tracking-tighter">
               {content.prizes.total}
             </span>
-            <span className="text-xl text-white/40 font-bold pb-4 md:pb-8">
+            <p className="text-lg md:text-2xl opacity-60 mt-2 font-black uppercase tracking-wider">
               {content.prizes.note}
-            </span>
-          </div>
+            </p>
+          </motion.div>
 
-          <div className="space-y-0">
+          <div className="space-y-0 border-t-4 border-black">
             {content.prizes.categories.map((cat, i) => (
               <motion.div
                 key={i}
-                {...fadeUp}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="border-b-2 border-white/10 py-4 flex items-center gap-6 hover:bg-white/[0.02] hover:pl-4 transition-all"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: i * 0.06 }}
+                className="py-4 md:py-5 border-b-4 border-black flex items-baseline gap-4"
               >
-                <span className="text-4xl font-black text-white/10 w-16">
+                <span className="text-3xl md:text-5xl font-black opacity-20 tabular-nums leading-none">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="text-xl font-bold text-white/70">
+                <span className="text-lg md:text-2xl font-black uppercase tracking-tight">
                   {cat}
                 </span>
               </motion.div>
             ))}
           </div>
 
-          <div className="bg-[#EBFF00] text-black px-6 py-4 mt-12 inline-block">
-            <span className="font-black text-sm tracking-wider">
-              {content.prizes.sponsorCallout.toUpperCase()}
-            </span>
-          </div>
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="mt-12 text-lg md:text-xl opacity-60 font-black"
+          >
+            {content.prizes.sponsorCallout}
+          </motion.p>
+        </div>
       </section>
 
-      {/* Who Should Apply */}
-      <section id="apply" className="bg-white text-black px-6 py-20 md:py-28">
+      {/* ── WHO SHOULD APPLY ── */}
+      <section id="apply" className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative">
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          06
+        </span>
+
         <motion.h2
-          {...fadeUp}
-          className="text-6xl md:text-9xl font-black tracking-tighter mb-16 leading-none"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-16"
         >
-          WHO SHOULD<br />
-          <span className="text-[#EBFF00]" style={{ WebkitTextStroke: "3px black" }}>
-            APPLY
-          </span>
+          <span style={{ WebkitTextStroke: "3px white", color: "transparent" }}>WHO</span>{" "}
+          <span style={{ color: RED }}>SHOULD</span>{" "}
+          <span>APPLY</span>
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-0">
           {content.whoShouldApply.groups.map((group, i) => (
             <motion.div
               key={i}
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className={`border-4 border-black p-8 md:p-10 ${i > 0 ? "md:-ml-1" : ""} ${i > 0 ? "-mt-1 md:mt-0" : ""}`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.12 }}
+              className="border-4 border-white p-8 md:p-10 -mt-1 md:mt-0 md:-ml-1 group hover:z-10 transition-colors duration-200"
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = i === 0 ? YELLOW : i === 1 ? RED : "white";
+                (e.currentTarget as HTMLElement).style.color = i === 1 ? "white" : "black";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                (e.currentTarget as HTMLElement).style.color = "white";
+              }}
             >
-              <h3 className="text-3xl font-black tracking-tighter mb-4 uppercase">
+              <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">
                 {group.name}
               </h3>
-              <p className="text-black/60 text-lg leading-relaxed font-medium">
+              <p className="text-base md:text-lg opacity-70 leading-relaxed">
                 {group.description}
               </p>
             </motion.div>
           ))}
         </div>
-      </section>
 
-      {/* Timeline */}
-      <section className="px-6 py-20 md:py-28 border-t-4 border-[#EBFF00]">
-        <motion.h2
-          {...fadeUp}
-          className="text-6xl md:text-9xl font-black tracking-tighter mb-16 leading-none"
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="flex flex-wrap gap-4 mt-12"
         >
-          TIMELINE
-        </motion.h2>
-
-        {content.timeline.events.map((event, i) => (
-          <motion.div
-            key={i}
-            {...fadeUp}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-            className="border-b-4 border-white/10 py-6 flex flex-col md:flex-row md:items-center justify-between gap-2"
-          >
-            <span className="text-2xl md:text-3xl font-black text-white/80 tracking-tighter">
-              {event.label.toUpperCase()}
-            </span>
-            <span className="text-xl font-black text-[#EBFF00]">
-              {event.date}
-            </span>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="px-6 py-20 md:py-28 bg-[#111]">
-        <motion.h2
-          {...fadeUp}
-          className="text-6xl md:text-9xl font-black tracking-tighter mb-16 leading-none"
-        >
-          FAQ
-        </motion.h2>
-        <div className="max-w-4xl">
-          <BrutalistFAQ items={content.faq.items} />
-        </div>
-      </section>
-
-      <Marquee text="APPLY NOW — HACKERS — AGENTS — SPONSORS — THE FUTURE IS BEING BUILT" speed={22} />
-
-      {/* Footer */}
-      <footer className="px-6 py-20 md:py-28">
-        <motion.p
-          {...fadeUp}
-          className="text-white/40 text-xl max-w-3xl mx-auto text-center leading-relaxed mb-12 font-medium"
-        >
-          {content.footer.body}
-        </motion.p>
-
-        <motion.div {...fadeUp} className="flex flex-col sm:flex-row gap-0 justify-center mb-16">
           {content.hero.ctas.primary.map((cta, i) => (
             <a
               key={cta.label}
               href={cta.href}
-              className={`px-8 py-4 text-sm font-black tracking-wider transition-colors border-2 text-center ${
+              className="px-8 py-4 text-sm md:text-base font-black tracking-[0.15em] uppercase border-4 transition-all duration-150 hover:scale-105"
+              style={
                 i === 0
-                  ? "bg-[#EBFF00] text-black border-[#EBFF00] hover:bg-white hover:border-white"
+                  ? { backgroundColor: YELLOW, borderColor: YELLOW, color: "black" }
                   : i === 1
-                  ? "bg-transparent text-[#EBFF00] border-[#EBFF00] hover:bg-[#EBFF00] hover:text-black"
-                  : "bg-transparent text-white border-white hover:bg-white hover:text-black"
-              }`}
+                    ? { backgroundColor: RED, borderColor: RED, color: "white" }
+                    : { backgroundColor: "transparent", borderColor: "white", color: "white" }
+              }
             >
-              {cta.label.toUpperCase()}
+              {cta.label}
+            </a>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* ── TIMELINE ── */}
+      <section className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative" style={{ backgroundColor: RED, color: "white" }}>
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.08] select-none pointer-events-none">
+          07
+        </span>
+
+        <div className="relative z-10">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-16"
+          >
+            {content.timeline.title}
+          </motion.h2>
+
+          <div className="border-t-4 border-white">
+            {content.timeline.events.map((event, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: i * 0.1 }}
+                className="py-6 md:py-8 border-b-4 border-white/40 flex flex-col md:flex-row md:items-baseline justify-between gap-2 md:gap-8"
+              >
+                <div className="flex items-baseline gap-4">
+                  <span className="text-4xl md:text-6xl font-black opacity-30 tabular-nums leading-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-xl md:text-3xl font-black uppercase tracking-tight">
+                    {event.label}
+                  </span>
+                </div>
+                <span className="text-base md:text-xl opacity-60 font-black tracking-wider uppercase ml-16 md:ml-0">
+                  {event.date}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" className="px-4 md:px-8 py-20 md:py-32 border-t-4 border-white relative">
+        <span className="absolute top-4 right-4 md:right-8 text-[20vw] font-black leading-none opacity-[0.04] select-none pointer-events-none">
+          08
+        </span>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-5xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.9] mb-12"
+          style={{ color: YELLOW }}
+        >
+          {content.faq.title}
+        </motion.h2>
+
+        <div className="max-w-4xl">
+          <BrutalFAQ items={content.faq.items} />
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="px-4 md:px-8 py-16 md:py-24 border-t-4 border-white">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-white/50 text-base md:text-lg max-w-3xl leading-relaxed mb-12"
+        >
+          {content.footer.body}
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="flex flex-wrap gap-4 mb-16"
+        >
+          {content.hero.ctas.primary.map((cta, i) => (
+            <a
+              key={cta.label}
+              href={cta.href}
+              className="px-6 py-3 text-sm font-black tracking-[0.15em] uppercase border-4 transition-all duration-150 hover:scale-105"
+              style={
+                i === 0
+                  ? { backgroundColor: YELLOW, borderColor: YELLOW, color: "black" }
+                  : { backgroundColor: "transparent", borderColor: "white/40", color: "white" }
+              }
+            >
+              {cta.label}
             </a>
           ))}
         </motion.div>
 
+        {/* Ethos */}
         <motion.p
-          {...fadeUp}
-          className="text-center text-white/20 text-xs font-black tracking-[0.3em]"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.3 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="text-sm font-black tracking-[0.3em] uppercase"
         >
-          {content.hero.ethos.toUpperCase()}
+          {content.hero.ethos}
         </motion.p>
       </footer>
     </div>
